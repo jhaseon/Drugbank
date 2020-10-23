@@ -99,8 +99,9 @@ for id in drugbank_id_list:
             for bond_card in bond_list:
                 for bond_card_content in bond_card:
                     if bond_card_content.get('class') == ['card-body']:
-                        if not bond_card_content: ## if bond_card doesn't exist
-                            bond_card_rows = bond_card_content.find("div", class_ = "col-sm-12 col-lg-7").contents[0]
+                        bond_card_content = bond_card_content.find("div", class_ = "col-sm-12 col-lg-7")
+                        if bond_card_content is not None:
+                            bond_card_rows = bond_card_content.contents[0]
                             for index, bond_card_row in enumerate(bond_card_rows):
                                 if bond_card_row.contents == ["Gene Name"]:
                                     gene_name = bond_card_rows.contents[index + 1].contents[0]
@@ -114,14 +115,18 @@ for id in drugbank_id_list:
             for bond_card in bond_list:
                 for bond_card_content in bond_card:
                     if bond_card_content.get('class') == ['card-body']:  
-                        if not bond_card_content: ## if bond_card doesn't exist
-                            bond_card_rows = bond_card_content.find("div", class_ = "col-sm-12 col-lg-5").contents[0]
+                        bond_card_content = bond_card_content.find("div", class_ = "col-sm-12 col-lg-5")
+                        if bond_card_content is not None: ## if bond_card doesn't exist
+                            bond_card_rows = bond_card_content.contents[0]
                             for index, bond_card_row in enumerate(bond_card_rows):
+                                temp_actions_list = []
                                 if bond_card_row.contents == ["Actions"]:
-                                    actions = bond_card_rows.contents[index + 1].contents[0].contents[0]
-                                    actions_list.append(actions)
+                                    for i in range(len(bond_card_rows.contents[index + 1].contents)):
+                                        actions = bond_card_rows.contents[index + 1].contents[i].contents[0]
+                                        temp_actions_list.extend([actions]) ## there could be multiple actions per target
+                                    actions_list.append(temp_actions_list)    
                         else:
-                            actions_list.append("")
+                            actions_list.append([""])
 
         ## Alternative Identifiers: Include database location. Ex: "KEGG Drug~D03136"
         ## Issues: Drugs.com, PDRhealth, RxList #NOTE: the values for these return not useful information. Will need to parse into reference link to gather more useful information.
@@ -155,12 +160,15 @@ for id in drugbank_id_list:
     ## Create final_targets_dict
     final_targets_dict = {}
     final_targets_dict['drugbankid'] = final_dict['drugbankid']
-    for index, item in enumerate(actions_list): 
-        final_targets_dict['actions'] = item
-        final_targets_dict['gene_name'] = gene_name_list[index]
-        sql_string = """INSERT INTO targets(drugbankid, actions, gene_name) 
-                    VALUES (%(drugbankid)s, %(actions)s, %(gene_name)s);"""
-        sendtodb(sql_string, final_targets_dict)
+    for index, item in enumerate(actions_list):
+        for inneritem in item:
+            final_targets_dict['actions'] = inneritem
+            final_targets_dict['gene_name'] = gene_name_list[index]
+            sql_string = """INSERT INTO targets(drugbankid, actions, gene_name) 
+                        VALUES (%(drugbankid)s, %(actions)s, %(gene_name)s);"""
+            sendtodb(sql_string, final_targets_dict)
+
+    
 
     
     

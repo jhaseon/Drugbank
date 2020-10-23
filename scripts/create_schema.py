@@ -9,8 +9,9 @@ output: none. #NOTE: outputs can be created to send to log
 import psycopg2 
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-def get_connection(user = "postgres", dbname = "postgres"):
-    password = "" # NOTE: Keys can be stored in a keys directory, ex: `../project_name/keys`, (ignored by .git) in the same project but preferably in a secure directory in the server handled by the database administrator. 
+def get_connection(dbname = "postgres"):
+    user = "postgres"
+    password = "n%:Wx{n%<ygk;7d^" # NOTE: Keys can be stored in a keys directory, ex: `../project_name/keys`, (ignored by .git) in the same project but preferably in a secure directory in the server handled by the database administrator. 
     connect_str = "dbname={} host='localhost' user='{}' password='{}'".format(dbname, user, password)
 
     return psycopg2.connect(connect_str)

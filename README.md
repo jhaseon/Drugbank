@@ -4,8 +4,8 @@ Technical Assessment
 ## Environment
 1. Debian 10.2
 2. Python 3.7.6
-3, psql (PostgreSQL) 11.9 (Debian 11.9-0+deb10u1)
-4, pgadmin 4.27
+3. psql (PostgreSQL) 11.9 (Debian 11.9-0+deb10u1)
+4. pgadmin 4.27
 
 ## Git
 1.      git clone https://github.com/jhaseon/OneThreeBioTech.git

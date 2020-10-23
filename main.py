@@ -37,7 +37,7 @@ def sendtodb(sql, final_dict):
 
 def get_connection(dbname = "postgres"):
     user = "postgres"
-    password = "n%:Wx{n%<ygk;7d^"
+    password = ""
     connect_str = "dbname={} host='localhost' user='{}' password='{}'".format(dbname, user, password)
 
     return psycopg2.connect(connect_str)

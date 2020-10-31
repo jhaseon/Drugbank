@@ -1,5 +1,5 @@
-# OneThreeBioTech
-Technical Assessment
+# DrugBank  
+Webscraping
 
 ## Environment
 1. Debian 10.2
